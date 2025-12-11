@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>OHAYO Premium Shuffle Lottery</title>
+<title>OHAYO Premium Lottery</title>
 
 <style>
   body {
@@ -11,40 +11,39 @@
     text-align: center;
     background: #111;
     color: #fff;
-    padding: 20px;
+    padding: 5px;
   }
 
   h2 {
     color: #f7cf4a;
-    margin-bottom: 14px;
+    margin-bottom: 6px;
     font-weight: 600;
     letter-spacing: 1px;
-    font-size: 22px;
+    font-size: 20px;
   }
 
-  /* Refresh button */
-  #refreshBtn {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    padding: 8px 14px;
-    background: #222;
-    color: #f7cf4a;
-    font-size: 14px;
-    border-radius: 6px;
+  /* 設定パネル */
+  #startPanel {
+    background: #000;
     border: 1px solid #444;
-    cursor: pointer;
-    z-index: 999;
+    padding: 10px;
+    border-radius: 10px;
+    width: 330px;
+    margin: 0 auto 6px auto;
   }
 
-  .inputBox {
-    margin: 10px 0;
-    font-size: 16px;
+  #startPanel .inputBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+    font-size: 15px;
   }
+
   input {
     width: 70px;
     padding: 6px;
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
     border-radius: 6px;
     border: 1px solid #444;
@@ -53,9 +52,9 @@
   }
 
   #startPanel button {
-    padding: 12px 25px;
-    font-size: 20px;
-    margin-top: 20px;
+    padding: 8px 18px;
+    font-size: 18px;
+    margin-top: 10px;
     border-radius: 8px;
     border: none;
     background: linear-gradient(135deg, #f7cf4a, #e6b82e);
@@ -64,13 +63,21 @@
     cursor: pointer;
   }
 
-  /* Game area */
+  /* 残り回数表示 */
+  #status {
+    display: none;
+    margin-top: 8px;
+    margin-bottom: 6px;
+    font-size: 20px;
+    color: #f7cf4a;
+  }
+
+  /* カードコンテナ（高さ可変） */
   .container {
     display: none;
     position: relative;
     width: 360px;
-    height: 450px;
-    margin: 20px auto;
+    margin: 0 auto;
   }
 
   .card {
@@ -92,7 +99,6 @@
     transform: rotateY(180deg);
   }
 
-  /* Card faces */
   .face {
     backface-visibility: hidden;
     position: absolute;
@@ -106,10 +112,8 @@
     font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  /* FRONT: Black & Gold */
   .front {
     background: #000;
     border: 2px solid #f7cf4a;
@@ -117,39 +121,40 @@
     font-weight: bold;
   }
 
-  /* BACK: White */
   .back {
     background: #fff;
     color: #000;
-    padding: 4px;
     border: 2px solid #f7cf4a;
     transform: rotateY(180deg);
   }
 
-  #status {
-    display: none;
-    margin-top: 10px;
-    font-size: 20px;
-    color: #f7cf4a;
+  /* 当たりピカッ！ */
+  .flash {
+    animation: flashAnim 0.7s ease-out;
+  }
+  @keyframes flashAnim {
+    0%   { box-shadow: 0 0 25px 12px gold; }
+    100% { box-shadow: 0 0 0 0 gold; }
   }
 
-  /* Dialog */
+  /* 当選ダイアログ */
   #dialog {
     display: none;
     position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     background: #222;
-    padding: 25px;
+    padding: 22px;
     border-radius: 12px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.6);
     z-index: 999;
     color: #f7cf4a;
     width: 260px;
   }
+
   #dialog button {
     padding: 10px 20px;
-    margin: 10px;
+    margin: 10px 6px;
     font-size: 16px;
     border-radius: 8px;
     border: none;
@@ -158,15 +163,63 @@
     color: #000;
     font-weight: bold;
   }
+
+  /* 残念エフェクト */
+  #sorryEffect {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 48px;
+    color: #ff557f;
+    font-weight: bold;
+    text-shadow: 0 0 20px #ff99aa;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    animation: shake 0.4s ease-in-out infinite alternate;
+  }
+  @keyframes shake {
+    0%   { transform: translateX(-50%) rotate(-6deg); }
+    100% { transform: translateX(-50%) rotate(6deg); }
+  }
+
+  /* スマホ最適化 */
+  @media (max-width: 480px) {
+    .container {
+      transform: scale(0.92);
+      transform-origin: top center;
+    }
+    #startPanel {
+      width: 92%;
+    }
+  }
+
+  /* 全リセット */
+  #reloadBtn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    padding: 8px 14px;
+    background: #222;
+    color: #f7cf4a;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    cursor: pointer;
+    z-index: 999;
+  }
 </style>
 </head>
 
 <body>
 
-<!-- Refresh Button -->
-<button id="refreshBtn" onclick="location.reload()">🔄 リセット</button>
+<button id="reloadBtn" onclick="location.reload()">🔄 全リセット</button>
 
-<!-- Start Panel -->
+<div id="sorryEffect">💥😭 残念！！ 😭💥</div>
+
+<!-- 設定パネル -->
 <div id="startPanel">
   <h2>🎯 OHAYO Premium くじ設定</h2>
 
@@ -180,40 +233,62 @@
 </div>
 
 <div id="status">残り回数：<span id="remain"></span> 回</div>
+
+<!-- カードエリア -->
 <div class="container" id="cards"></div>
 
-<!-- Dialog -->
+<!-- 当選ダイアログ -->
 <div id="dialog">
-  <h3 id="dialogTitle">🎉 当たり！ 続けますか？</h3>
-  <button onclick="continueGame()">続ける</button>
-  <button onclick="stopGame()">やめる</button>
+  <h3 id="dialogTitle">🎉 当選！</h3>
+  <button id="continueBtn" onclick="continueGame()">続ける</button>
+  <button id="receiveBtn" onclick="receivePrize()">受け取る</button>
 </div>
 
-
 <script>
-
 let prizes = [];
 let remaining = 3;
 let TOTAL = 20;
 let gameLocked = false;
 let currentPrize = "";
+let canDrawMoreOnWin = false;
 
-/* --- Setup --- */
+/* 残念演出 */
+function showSorryEffect(){
+  const el = document.getElementById("sorryEffect");
+  el.style.display = "block";
+  setTimeout(()=> el.style.opacity = 1, 20);
+  setTimeout(()=>{
+    el.style.opacity = 0;
+    setTimeout(()=> el.style.display = "none", 700);
+  }, 2000);
+}
+
+/* ゲームだけ初期化（数値保持） */
+function resetGameOnly() {
+  const c = document.getElementById("cards");
+  c.innerHTML = "";
+  c.style.display = "none";
+  document.getElementById("status").style.display = "none";
+  gameLocked = false;
+  currentPrize = "";
+}
+
+/* スタート */
 function setupGame() {
   const s1v = Number(document.getElementById("s1").value);
   const s2v = Number(document.getElementById("s2").value);
   const s3v = Number(document.getElementById("s3").value);
-  TOTAL = Number(document.getElementById("cardNum").value);
+  TOTAL     = Number(document.getElementById("cardNum").value);
   remaining = Number(document.getElementById("turns").value);
 
+  // 景品生成
   prizes = [];
   for (let i=0; i<s1v; i++) prizes.push("🎉 1等");
   for (let i=0; i<s2v; i++) prizes.push("🎧 2等");
   for (let i=0; i<s3v; i++) prizes.push("🏷 3等");
-
   while (prizes.length < TOTAL) prizes.push("❌ ハズレ");
 
-  document.getElementById("startPanel").style.display = "none";
+  // 表示
   document.getElementById("remain").textContent = remaining;
   document.getElementById("status").style.display = "block";
 
@@ -223,63 +298,73 @@ function setupGame() {
   setTimeout(() => align(), 1500);
 }
 
-/* --- Create cards --- */
+/* カード生成 */
 function createCards() {
   const c = document.getElementById("cards");
   c.innerHTML = "";
   c.style.display = "block";
+}
 
-  for (let i=0; i<TOTAL; i++) {
-    const card = document.createElement("div");
-    card.className="card";
+/* 散布演出 */
+function scatter() {
+  for(let i=0;i<TOTAL;i++){
+    const card = buildCard();
+    const container = document.getElementById("cards");
+    container.appendChild(card);
 
-    const inner=document.createElement("div");
-    inner.className="inner";
-
-    const front=document.createElement("div");
-    front.className="face front";
-    front.textContent="OHAYO";
-
-    const back=document.createElement("div");
-    back.className="face back";
-    back.textContent="";
-
-    inner.appendChild(front);
-    inner.appendChild(back);
-    card.appendChild(inner);
-    c.appendChild(card);
+    card.style.left = Math.random()*260+"px";
+    card.style.top  = Math.random()*300+"px";
   }
 }
 
-/* Random scatter */
-function scatter() {
-  document.querySelectorAll(".card").forEach(card=>{
-    card.style.left = Math.random()*260+"px";
-    card.style.top  = Math.random()*350+"px";
-  });
+/* カード作成 */
+function buildCard(){
+  const card = document.createElement("div");
+  card.className="card";
+
+  const inner=document.createElement("div");
+  inner.className="inner";
+
+  const front=document.createElement("div");
+  front.className="face front";
+  front.textContent="OHAYO";
+
+  const back=document.createElement("div");
+  back.className="face back";
+
+  inner.appendChild(front);
+  inner.appendChild(back);
+  card.appendChild(inner);
+
+  return card;
 }
 
-/* Shuffle animation */
+/* シャッフル */
 function shuffle() {
   let count=0;
   const timer = setInterval(()=>{
     document.querySelectorAll(".card").forEach(card=>{
       card.style.left = Math.random()*260+"px";
-      card.style.top  = Math.random()*350+"px";
+      card.style.top  = Math.random()*300+"px";
     });
     count++;
     if(count>10) clearInterval(timer);
   },100);
 }
 
-/* Align neatly */
+/* 整列（高さ自動調整） */
 function align() {
   const cards=document.querySelectorAll(".card");
-  let idx=0;
 
+  let rows = Math.ceil(TOTAL / 5);
+  let container = document.getElementById("cards");
+  container.style.height = (rows * 110 + 20) + "px";
+
+  let idx=0;
   cards.forEach(card=>{
     let row=Math.floor(idx/5);
     let col=idx%5;
+
     card.style.transition="all 0.6s";
     card.style.left=col*75+"px";
     card.style.top =row*110+"px";
@@ -289,7 +374,21 @@ function align() {
   assignPrizes();
 }
 
-/* Assign prizes */
+/* 景品自動減算 */
+function reducePrizeCount(prize){
+  if(prize.includes("1等")){
+    const el = document.getElementById("s1");
+    el.value = Math.max(0, Number(el.value) - 1);
+  } else if(prize.includes("2等")){
+    const el = document.getElementById("s2");
+    el.value = Math.max(0, Number(el.value) - 1);
+  } else if(prize.includes("3等")){
+    const el = document.getElementById("s3");
+    el.value = Math.max(0, Number(el.value) - 1);
+  }
+}
+
+/* 賞品割当 */
 function assignPrizes() {
   let list=[...prizes];
   const cards=document.querySelectorAll(".card");
@@ -310,33 +409,59 @@ function assignPrizes() {
       remaining--;
       document.getElementById("remain").textContent=remaining;
 
+      // 最後がハズレ → 残念
+      if(remaining<=0 && prize === "❌ ハズレ"){
+        showSorryEffect();
+      }
+
+      // 当選
       if(prize.includes("等")){
-        currentPrize = prize;
-        gameLocked = true;
+        gameLocked=true;
+        currentPrize=prize;
 
-        document.getElementById("dialogTitle").innerHTML =
-          `🎉 ${currentPrize} 当選！ 続けますか？`;
+        back.classList.add("flash");
+        setTimeout(()=> back.classList.remove("flash"), 800);
 
-        document.getElementById("dialog").style.display="block";
+        const dlg=document.getElementById("dialog");
+        const title=document.getElementById("dialogTitle");
+        const continueBtn=document.getElementById("continueBtn");
 
-        const i=prizes.indexOf(prize);
-        if(i!==-1) prizes.splice(i,1);
+        if(remaining>0){
+          canDrawMoreOnWin = true;
+          title.textContent=`🎉 ${prize} 当選！ 続けますか？`;
+          continueBtn.textContent="続ける";
+        } else {
+          canDrawMoreOnWin = false;
+          title.textContent=`🎉 ${prize} 当選！ 受け取りますか？`;
+          continueBtn.textContent="続ける";
+        }
+
+        dlg.style.display="block";
       }
     };
   });
 }
 
-/* Dialog actions */
+/* 続ける */
 function continueGame(){
-  gameLocked=false;
   document.getElementById("dialog").style.display="none";
+
+  if(canDrawMoreOnWin){
+    gameLocked=false; // 次を引ける
+  } else {
+    resetGameOnly();  // 次の人へ
+  }
 }
-function stopGame(){
-  alert("ゲーム終了！おめでとうございます！");
-  location.reload();
+
+/* 受け取る */
+function receivePrize(){
+  if(currentPrize){
+    reducePrizeCount(currentPrize);
+  }
+  document.getElementById("dialog").style.display="none";
+  resetGameOnly();
 }
 
 </script>
-
 </body>
 </html>
