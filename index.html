@@ -16,45 +16,41 @@
 
   h2 {
     color: #f7cf4a;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     font-weight: 600;
-    letter-spacing: 1px;
-    font-size: 20px;
+    font-size: 18px;
   }
 
-  /* 設定パネル */
+  /* 設定パネル 85% */
   #startPanel {
     background: #000;
     border: 1px solid #444;
-    padding: 10px;
+    padding: 8px;
     border-radius: 10px;
-    width: 330px;
-    margin: 0 auto 6px auto;
+    width: 280px;
+    margin: 0 auto 8px auto;
   }
-
   #startPanel .inputBox {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 5px 0;
-    font-size: 15px;
+    margin: 4px 0;
+    font-size: 13px;
   }
-
   input {
-    width: 70px;
-    padding: 6px;
-    font-size: 16px;
+    width: 65px;
+    padding: 4px;
+    font-size: 14px;
     text-align: center;
     border-radius: 6px;
     border: 1px solid #444;
     background: #222;
     color: #f7cf4a;
   }
-
   #startPanel button {
-    padding: 8px 18px;
-    font-size: 18px;
-    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 16px;
+    margin-top: 8px;
     border-radius: 8px;
     border: none;
     background: linear-gradient(135deg, #f7cf4a, #e6b82e);
@@ -63,16 +59,15 @@
     cursor: pointer;
   }
 
-  /* 残り回数表示 */
+  /* 残り回数 */
   #status {
     display: none;
-    margin-top: 8px;
+    margin-top: 10px;
     margin-bottom: 6px;
-    font-size: 20px;
+    font-size: 18px;
     color: #f7cf4a;
   }
 
-  /* カードコンテナ（高さ可変） */
   .container {
     display: none;
     position: relative;
@@ -94,7 +89,6 @@
     transition: transform 0.7s;
     transform-style: preserve-3d;
   }
-
   .inner.open {
     transform: rotateY(180deg);
   }
@@ -110,8 +104,6 @@
     align-items: center;
     box-shadow: 0 6px 14px rgba(0,0,0,0.6);
     font-size: 16px;
-    white-space: nowrap;
-    overflow: hidden;
   }
 
   .front {
@@ -128,34 +120,45 @@
     transform: rotateY(180deg);
   }
 
-  /* 当たりピカッ！ */
+  /* 当選時の強い光 */
   .flash {
     animation: flashAnim 0.7s ease-out;
   }
   @keyframes flashAnim {
-    0%   { box-shadow: 0 0 25px 12px gold; }
+    0%   { box-shadow: 0 0 35px 18px gold; }
     100% { box-shadow: 0 0 0 0 gold; }
   }
 
-  /* 当選ダイアログ */
+  /* 当選時のポンッと弾むアニメ（cardに付与） */
+  .bounce {
+    animation: bounceAnim 0.25s ease-out;
+  }
+  @keyframes bounceAnim {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.08); }
+    100% { transform: scale(1); }
+  }
+
+  /* ダイアログ */
   #dialog {
     display: none;
     position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     background: #222;
-    padding: 22px;
+    padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-    z-index: 999;
-    color: #f7cf4a;
-    width: 260px;
+    width: 250px;
+    z-index: 1000;
   }
-
+  #dialog h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
   #dialog button {
-    padding: 10px 20px;
-    margin: 10px 6px;
-    font-size: 16px;
+    padding: 8px 18px;
+    margin: 8px;
+    font-size: 15px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
@@ -164,43 +167,32 @@
     font-weight: bold;
   }
 
-  /* 残念エフェクト */
+  /* 残念表示 */
   #sorryEffect {
     display: none;
     position: fixed;
-    top: 30%;
+    top: 38%;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 48px;
+    font-size: 42px;
     color: #ff557f;
     font-weight: bold;
     text-shadow: 0 0 20px #ff99aa;
-    z-index: 2000;
     opacity: 0;
     transition: opacity 0.7s ease;
     animation: shake 0.4s ease-in-out infinite alternate;
+    z-index: 2000;
   }
   @keyframes shake {
-    0%   { transform: translateX(-50%) rotate(-6deg); }
-    100% { transform: translateX(-50%) rotate(6deg); }
-  }
-
-  /* スマホ最適化 */
-  @media (max-width: 480px) {
-    .container {
-      transform: scale(0.92);
-      transform-origin: top center;
-    }
-    #startPanel {
-      width: 92%;
-    }
+    0%   { transform: translateX(-50%) rotate(-5deg); }
+    100% { transform: translateX(-50%) rotate(5deg); }
   }
 
   /* 全リセット */
   #reloadBtn {
     position: fixed;
-    top: 15px;
-    right: 15px;
+    top: 18px;
+    right: 18px;
     padding: 8px 14px;
     background: #222;
     color: #f7cf4a;
@@ -210,13 +202,23 @@
     cursor: pointer;
     z-index: 999;
   }
+
+  @media(max-width:480px){
+    #reloadBtn { right: 10px; }
+    .container {
+      transform: scale(0.9);
+      transform-origin: top center;
+    }
+  }
 </style>
 </head>
 
 <body>
 
+<!-- 全リセット -->
 <button id="reloadBtn" onclick="location.reload()">🔄 全リセット</button>
 
+<!-- 残念 -->
 <div id="sorryEffect">💥😭 残念！！ 😭💥</div>
 
 <!-- 設定パネル -->
@@ -233,8 +235,6 @@
 </div>
 
 <div id="status">残り回数：<span id="remain"></span> 回</div>
-
-<!-- カードエリア -->
 <div class="container" id="cards"></div>
 
 <!-- 当選ダイアログ -->
@@ -244,6 +244,9 @@
   <button id="receiveBtn" onclick="receivePrize()">受け取る</button>
 </div>
 
+<!-- 🎊 紙吹雪ライブラリ -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+
 <script>
 let prizes = [];
 let remaining = 3;
@@ -252,7 +255,6 @@ let gameLocked = false;
 let currentPrize = "";
 let canDrawMoreOnWin = false;
 
-/* 残念演出 */
 function showSorryEffect(){
   const el = document.getElementById("sorryEffect");
   el.style.display = "block";
@@ -263,7 +265,6 @@ function showSorryEffect(){
   }, 2000);
 }
 
-/* ゲームだけ初期化（数値保持） */
 function resetGameOnly() {
   const c = document.getElementById("cards");
   c.innerHTML = "";
@@ -273,7 +274,6 @@ function resetGameOnly() {
   currentPrize = "";
 }
 
-/* スタート */
 function setupGame() {
   const s1v = Number(document.getElementById("s1").value);
   const s2v = Number(document.getElementById("s2").value);
@@ -281,14 +281,12 @@ function setupGame() {
   TOTAL     = Number(document.getElementById("cardNum").value);
   remaining = Number(document.getElementById("turns").value);
 
-  // 景品生成
   prizes = [];
   for (let i=0; i<s1v; i++) prizes.push("🎉 1等");
   for (let i=0; i<s2v; i++) prizes.push("🎧 2等");
   for (let i=0; i<s3v; i++) prizes.push("🏷 3等");
   while (prizes.length < TOTAL) prizes.push("❌ ハズレ");
 
-  // 表示
   document.getElementById("remain").textContent = remaining;
   document.getElementById("status").style.display = "block";
 
@@ -298,14 +296,12 @@ function setupGame() {
   setTimeout(() => align(), 1500);
 }
 
-/* カード生成 */
 function createCards() {
   const c = document.getElementById("cards");
   c.innerHTML = "";
   c.style.display = "block";
 }
 
-/* 散布演出 */
 function scatter() {
   for(let i=0;i<TOTAL;i++){
     const card = buildCard();
@@ -317,7 +313,6 @@ function scatter() {
   }
 }
 
-/* カード作成 */
 function buildCard(){
   const card = document.createElement("div");
   card.className="card";
@@ -339,7 +334,6 @@ function buildCard(){
   return card;
 }
 
-/* シャッフル */
 function shuffle() {
   let count=0;
   const timer = setInterval(()=>{
@@ -352,13 +346,11 @@ function shuffle() {
   },100);
 }
 
-/* 整列（高さ自動調整） */
 function align() {
   const cards=document.querySelectorAll(".card");
 
   let rows = Math.ceil(TOTAL / 5);
-  let container = document.getElementById("cards");
-  container.style.height = (rows * 110 + 20) + "px";
+  document.getElementById("cards").style.height = (rows * 110 + 20) + "px";
 
   let idx=0;
   cards.forEach(card=>{
@@ -374,7 +366,6 @@ function align() {
   assignPrizes();
 }
 
-/* 景品自動減算 */
 function reducePrizeCount(prize){
   if(prize.includes("1等")){
     const el = document.getElementById("s1");
@@ -388,72 +379,87 @@ function reducePrizeCount(prize){
   }
 }
 
-/* 賞品割当 */
 function assignPrizes() {
   let list=[...prizes];
   const cards=document.querySelectorAll(".card");
 
   cards.forEach(card=>{
     const prize=list.splice(Math.floor(Math.random()*list.length),1)[0];
+    const inner=card.querySelector(".inner");
     const back=card.querySelector(".back");
     back.textContent=prize;
 
     card.onclick=()=>{
       if(gameLocked) return;
-
-      const inner=card.querySelector(".inner");
       if(inner.classList.contains("open")) return;
       if(remaining<=0) return;
 
       inner.classList.add("open");
+
       remaining--;
       document.getElementById("remain").textContent=remaining;
 
-      // 最後がハズレ → 残念
       if(remaining<=0 && prize === "❌ ハズレ"){
         showSorryEffect();
       }
 
-      // 当選
+      /* 🎉 当選演出（強め） */
       if(prize.includes("等")){
-        gameLocked=true;
-        currentPrize=prize;
+        gameLocked = true;
+        currentPrize = prize;
 
+        /* ① 強い光 */
         back.classList.add("flash");
         setTimeout(()=> back.classList.remove("flash"), 800);
 
-        const dlg=document.getElementById("dialog");
-        const title=document.getElementById("dialogTitle");
-        const continueBtn=document.getElementById("continueBtn");
+        /* ② カード全体をポンッと弾ませる */
+        card.classList.add("bounce");
+        setTimeout(()=> card.classList.remove("bounce"), 260);
 
-        if(remaining>0){
-          canDrawMoreOnWin = true;
-          title.textContent=`🎉 ${prize} 当選！ 続けますか？`;
-          continueBtn.textContent="続ける";
-        } else {
-          canDrawMoreOnWin = false;
-          title.textContent=`🎉 ${prize} 当選！ 受け取りますか？`;
-          continueBtn.textContent="続ける";
-        }
+        /* ③ 紙吹雪 */
+        setTimeout(() => {
+          confetti({
+            particleCount: 140,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }, 260);
 
-        dlg.style.display="block";
+        /* ④ 1.2秒後にダイアログ */
+        setTimeout(()=>{
+          const dlg=document.getElementById("dialog");
+          const title=document.getElementById("dialogTitle");
+          const continueBtn=document.getElementById("continueBtn");
+
+          if(remaining > 0){
+            canDrawMoreOnWin = true;
+            title.textContent = `🎉 ${prize} 当選！ 続けますか？`;
+            continueBtn.textContent = "続ける";
+          } else {
+            canDrawMoreOnWin = false;
+            title.textContent = `🎉 ${prize} 当選！ 受け取りますか？`;
+            continueBtn.textContent = "続ける";
+          }
+
+          dlg.style.display="block";
+        }, 1200);
       }
     };
   });
 }
 
-/* 続ける */
 function continueGame(){
   document.getElementById("dialog").style.display="none";
 
   if(canDrawMoreOnWin){
-    gameLocked=false; // 次を引ける
+    // まだ回数が残っている → 盤面はそのまま / 次の1枚を引く
+    gameLocked=false;
   } else {
-    resetGameOnly();  // 次の人へ
+    // 残り回数0で当たったときに「続ける」を押した場合 → 終了扱い
+    resetGameOnly();
   }
 }
 
-/* 受け取る */
 function receivePrize(){
   if(currentPrize){
     reducePrizeCount(currentPrize);
@@ -461,7 +467,6 @@ function receivePrize(){
   document.getElementById("dialog").style.display="none";
   resetGameOnly();
 }
-
 </script>
 </body>
 </html>
