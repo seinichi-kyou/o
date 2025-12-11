@@ -182,6 +182,8 @@
     transition: opacity 0.7s ease;
     animation: shake 0.4s ease-in-out infinite alternate;
     z-index: 2000;
+    white-space: nowrap;      /* ← 改行禁止（最強） */
+    text-align: center;       /* ← 中央配置（任意） */
   }
   @keyframes shake {
     0%   { transform: translateX(-50%) rotate(-5deg); }
@@ -219,7 +221,7 @@
 <button id="reloadBtn" onclick="location.reload()">🔄</button>
 
 <!-- 残念 -->
-<div id="sorryEffect">💥😭 残念 😭💥</div>
+<div id="sorryEffect">💥😭😭 残念 😭😭💥</div>
 
 <!-- 設定パネル -->
 <div id="startPanel">
